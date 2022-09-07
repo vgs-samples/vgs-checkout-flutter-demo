@@ -70,7 +70,7 @@ Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-star
 ```
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/verygoodsecurity/vgs-checkout-flutter-demo/images/VGSCheckout_Flutter_iOS.gif" width="200" alt="VGS Checkout iOS Flutter demo">
+	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
 </p>
 
 ## Integrate VGS Checkout SDK native iOS code with Flutter app
@@ -78,7 +78,7 @@ Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-star
 General integration overview:
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/verygoodsecurity/vgs-checkout-flutter-demo/images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
+	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
 </p>
 
 1. Review offical Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
