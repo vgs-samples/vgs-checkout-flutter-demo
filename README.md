@@ -1,6 +1,7 @@
 # README
 
-This demo shows how to integrate VGS Checkout [iOS](https://github.com/verygoodsecurity/vgs-checkout-ios) and [Android](https://github.com/verygoodsecurity/vgs-checkout-android) SDK to your Flutter app. We don't have official Flutter package. You can easily integrate VGS Checkout SDK into your mobile crossplatform Flutter apps.
+This demo shows how to integrate VGS Checkout [iOS](https://github.com/verygoodsecurity/vgs-checkout-ios) and [Android](https://github.com/verygoodsecurity/vgs-checkout-android) SDK to your Flutter app.
+We don't have official Flutter package. You can easily integrate VGS Checkout SDK into your mobile crossplatform Flutter apps.
 
 ## Run application.
 
@@ -26,7 +27,8 @@ This demo shows how to integrate VGS Checkout [iOS](https://github.com/verygoods
 ```
 
 3. `cd` to `ios/Runner/Models/DemoAppConfiguration` and find
-   `DemoAppConfiguration.swift` file. Set your `vault_id` for custom configuation, `environment`, `tenant_id` for payment orchestration add card setup.
+   `DemoAppConfiguration.swift` file.
+   Set your `vault_id` for custom configuation, `environment`, `tenant_id` for payment orchestration add card setup.
 
 ```swift
 /// Setup your configuration details here.
@@ -49,7 +51,8 @@ class DemoAppConfiguration {
 }
 ```
 
-4. go back to root project folder and `cd` to `lib/utils/constants`. Find `constants.dart` file and setup your custom backend api client if you need to test Payment integration.
+4. go back to root project folder and `cd` to `lib/utils/constants`.
+   Find `constants.dart` file and setup your custom backend api client URL if you need to test Payment Orchestration integration.
 
 ```dart
 class AppConstants {
@@ -59,8 +62,7 @@ class AppConstants {
 ```
 
 5. run flutter app on iOS simulator
-
-Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).
+   Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).
 
 6. in case of possible issues a common fix is to clean project and reinstall packages:
 
@@ -187,7 +189,9 @@ Note: it is important to call `FlutterResult` callback in `iOS` code. In this wa
   }
 ```
 
-5. Implement `VGSCheckoutDelegate` inteface in your native channel implementation. VGS Checkout cannot emit events to Flutter code directly. It provides `VGSCheckoutDelegate` with a set of methods. t A delegate is just a class that does some work for another class and instances are usually linked by weak reference.
+5. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
+   VGS Checkout cannot emit events to Flutter code directly. It provides `VGSCheckoutDelegate` with a set of methods.
+   A delegate is just a class that does some work for another class and instances are usually linked by weak reference.
    You need to listen to `VGSCheckoutDelegate` methods and invoce methods in Flutter code using `invokeMethod`.
    It is up to you how to send and parse arguments payload.
    A suitable data structure can be Swift dictionary of type `[String: Any]` which will be transmitted as `Map<dynamic, dynamic>` in Flutter code.
@@ -256,7 +260,7 @@ import Flutter
 		let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
 
     // Register custom config method channel.
-		checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
+	  checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
 
 		// Register payopt add card config method channel.
 		checkoutPayoptAddCardConfigChannel = PayOptAddCardConfigChannel(messenger: controller.binaryMessenger)
