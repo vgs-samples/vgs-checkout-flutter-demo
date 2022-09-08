@@ -85,16 +85,15 @@ General integration overview:
 
 1. Review offical Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
 
-2. Install `VGS Checkout SDK` via `CocoaPods`. If you have created from scratch Flutter project usually you need to preinstall `CocoaPods`.
-   `cd` to `ios` folder and run:
+2. Install `VGS Checkout SDK` via `CocoaPods`. If you have created from scratch Flutter project usually you need to preinstall `CocoaPods`. `cd` to `ios` folder and run:
 
 ```bash
   pod init
 ```
 
-You should have `Podfile` in your `ios` directory. `Podfile` in iOS acts as a `pubspec.yaml` in Flutter and contains list of external dependencies. Add `VGSCheckoutSDK` pod to `Runner` `target`.
+3. You should have `Podfile` in your `ios` directory. `Podfile` in iOS acts as a `pubspec.yaml` in Flutter and contains list of external dependencies. Add `VGSCheckoutSDK` pod to `Runner` `target`.
 
-```bash
+```ruby
 target 'Runner' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
@@ -105,16 +104,14 @@ target 'Runner' do
 end
 ```
 
-Make sure deployment minimal iOS version of your target and project
-is set to `iOS 10` or later in iOS [project settings](https://stackoverflow.com/a/61335546).
-
-Run:
+4. Make sure deployment minimal iOS version of your target and project is set to `iOS 10` or later in iOS [project settings](https://stackoverflow.com/a/61335546)
+   Run:
 
 ```bash
   pod update
 ```
 
-3. Implement method channels and handlers to invoke native iOS code
+5. Implement method channels and handlers to invoke native iOS code
    from Flutter by sending messages.
    The Method Channel stems from binary messaging and the platform channel and supports a bidirectional invocation of methods.
 
@@ -167,7 +164,7 @@ class CustomConfigChannel: NSObject {
 
 Note: it is important to call `FlutterResult` callback in `iOS` code. In this way you can notify `Flutter` app that Checkout started and you can `await` for the start event.
 
-4. Implement `Flutter` code to start `VGS Checkout` from iOS code.
+6. Implement `Flutter` code to start `VGS Checkout` from iOS code.
 
 ```dart
   // Create platform method channel.
@@ -189,7 +186,7 @@ Note: it is important to call `FlutterResult` callback in `iOS` code. In this wa
   }
 ```
 
-5. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
+7. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
    VGS Checkout cannot emit events to Flutter code directly. It provides `VGSCheckoutDelegate` with a set of methods.
    A delegate is just a class that does some work for another class and instances are usually linked by weak reference.
    You need to listen to `VGSCheckoutDelegate` methods and invoce methods in Flutter code using `invokeMethod`.
@@ -234,7 +231,7 @@ extension CustomConfigChannel: VGSCheckoutDelegate {
 }
 ```
 
-6. Register Method and Event Channels in your `AppDelegate`.
+8. Register Method and Event Channels in your `AppDelegate`.
    `AppDelegate` acts as an entry point in iOS native applications.
 
 ```swift
@@ -272,7 +269,7 @@ import Flutter
 
 ```
 
-7. Handle methods invocation from native code in your Flutter code using `setMethodCallHandler`.
+9. Handle methods invocation from native code in your Flutter code using `setMethodCallHandler`.
 
 ```dart
 @override
@@ -340,4 +337,4 @@ import Flutter
 
 ```
 
-8. Checkout will be presented as a separate screen like fullscreen modal `Widget` with its own `Scaffold` and `AppBar` presented by iOS `UINavigationController` as native iOS UI control. You cannot add your own widgets on the Checkout page.
+10. Checkout will be presented as a separate screen like fullscreen modal `Widget` with its own `Scaffold` and `AppBar` presented by iOS `UINavigationController` as native iOS UI control. You cannot add your own widgets on the Checkout page.
