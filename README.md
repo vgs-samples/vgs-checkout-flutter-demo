@@ -118,7 +118,7 @@ end
    To keep `AppDelegate` sample lean all code with method channel setup is located in `ios\Runner\Channels` folders. Please check `CustomConfigChannel.swift` and `PayOptAddCardConfigChannel.swift` files.
 
 ```swift
- /// Implementation of Flutter Bridge (FlutterMethodChannel).
+/// Implementation of Flutter Bridge (FlutterMethodChannel).
 class CustomConfigChannel: NSObject {
 
 	// MARK: - Initialization.
