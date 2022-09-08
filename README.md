@@ -202,8 +202,8 @@ extension CustomConfigChannel: VGSCheckoutDelegate {
 	}
 
 	func checkoutDidFinish(with requestResult: VGSCheckoutRequestResult) {
-
-		var title = ""
+    
+    var title = ""
 		var message = ""
 
 		switch requestResult {
