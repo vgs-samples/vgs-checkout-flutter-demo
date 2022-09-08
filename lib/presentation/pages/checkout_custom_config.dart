@@ -38,7 +38,6 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
         textToDisplay = 'User did cancel checkout.';
         toastMessageText = 'Checkout was cancelled.';
         break;
-      // Navigator.pushNamed(context, "/ring");
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);

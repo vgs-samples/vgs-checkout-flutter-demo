@@ -104,7 +104,7 @@ target 'Runner' do
 end
 ```
 
-4. Make sure deployment minimal iOS version of your target and project is set to `iOS 10` or later in iOS [project settings](https://stackoverflow.com/a/61335546)
+4. Make sure deployment minimal iOS version of your target and project is set to `iOS 10` or later in iOS [project settings](https://stackoverflow.com/a/61335546).
    Run:
 
 ```bash
@@ -256,13 +256,13 @@ import Flutter
 		// Get current root view controller (`root` widget) to present Checkout.
 		let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
 
-    // Register custom config method channel.
-	  checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
+  // Register custom config method channel.
+	checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
 
-		// Register payopt add card config method channel.
-		checkoutPayoptAddCardConfigChannel = PayOptAddCardConfigChannel(messenger: controller.binaryMessenger)
+	// Register payopt add card config method channel.
+	checkoutPayoptAddCardConfigChannel = PayOptAddCardConfigChannel(messenger: controller.binaryMessenger)
 
-		GeneratedPluginRegistrant.register(with: self)
+	GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
@@ -288,7 +288,6 @@ import Flutter
         textToDisplay = 'User did cancel checkout.';
         toastMessageText = 'Checkout was cancelled.';
         break;
-      // Navigator.pushNamed(context, "/ring");
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
