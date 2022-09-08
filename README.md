@@ -121,45 +121,46 @@ end
 /// Implementation of Flutter Bridge (FlutterMethodChannel).
 class CustomConfigChannel: NSObject {
 
-	// MARK: - Initialization.
+    // MARK: - Initialization.
 
-	/// Initializer.
-	/// - Parameter messenger: `FlutterBinaryMessenger` object, binary messenger,
-	init(messenger: FlutterBinaryMessenger) {
-		// Create Flutter method channel to invoce methods from Flutter code in native iOS code by sending messages.
-		flutterMethodChannel = FlutterMethodChannel(name: "vgs.com.checkout/customConfig",
-																							binaryMessenger: messenger)
-		super.init()
-		registerCustomConfigChannel()
-	}
+    /// Initializer.
+    /// - Parameter messenger: `FlutterBinaryMessenger` object, binary messenger,
+    init(messenger: FlutterBinaryMessenger) {
+        // Create Flutter method channel to invoce methods from Flutter code in native iOS code by sending messages.
+        flutterMethodChannel = FlutterMethodChannel(name: "vgs.com.checkout/customConfig",
+                                                                                            binaryMessenger: messenger)
+        super.init()
+        registerCustomConfigChannel()
+    }
 
-	// MARK: - Vars
+    // MARK: - Vars
 
-	/// Checkout instance.
-	fileprivate var vgsCheckout: VGSCheckout?
+    /// Checkout instance.
+    fileprivate var vgsCheckout: VGSCheckout?
 
-	/// Flutter method channel.
-	fileprivate var flutterMethodChannel: FlutterMethodChannel
+    /// Flutter method channel.
+    fileprivate var flutterMethodChannel: FlutterMethodChannel
 
-	// MARK: - Method Channel
+    // MARK: - Method Channel
 
-	/// Registers custom config channel.
-	/// - Parameter controller: `FlutterViewController` object, Flutter view controller.
-	func registerCustomConfigChannel() {
+    /// Registers custom config channel.
+    /// - Parameter controller: `FlutterViewController` object, Flutter view controller.
+    func registerCustomConfigChannel() {
 
-		// Set handler to invoce native iOS code on messages from Flutter code.
-		flutterMethodChannel.setMethodCallHandler({[weak self]
-			(call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
-			// This method is invoked on the UI thread.
-			guard call.method == "startCustomCheckoutConfig" else {
-				result(FlutterMethodNotImplemented)
-				return
-			}
+        // Set handler to invoce native iOS code on messages from Flutter code.
+        flutterMethodChannel.setMethodCallHandler({[weak self]
+            (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+            // This method is invoked on the UI thread.
+            guard call.method == "startCustomCheckoutConfig" else {
+                result(FlutterMethodNotImplemented)
+                return
+            }
 
-			self?.startCustomCheckoutConfig(result: result)
-		})
-	}
+            self?.startCustomCheckoutConfig(result: result)
+        })
+    }
 }
+
 ```
 
 Note: it is important to call `FlutterResult` callback in `iOS` code. In this way you can notify `Flutter` app that Checkout started and you can `await` for the start event.
@@ -167,23 +168,23 @@ Note: it is important to call `FlutterResult` callback in `iOS` code. In this wa
 6. Implement `Flutter` code to start `VGS Checkout` from iOS code.
 
 ```dart
-  // Create platform method channel.
-  static const platform = MethodChannel('vgs.com.checkout/customConfig');
+// Create platform method channel.
+static const platform = MethodChannel('vgs.com.checkout/customConfig');
 
-  // On button tap send `startCustomCheckoutConfig` message to native iOS code.
-  Future<void> _startCheckoutCustomConfig() async {
-    try {
-      final checkoutResult =
+// On button tap send `startCustomCheckoutConfig` message to native iOS code.
+Future<void> _startCheckoutCustomConfig() async {
+   try {
+     final checkoutResult =
           await platform.invokeMethod('startCustomCheckoutConfig');
-      print('present checkout with custon config');
-    } on PlatformException catch (e) {
-      print('Platform exception: ${e.message}');
-    }
+     print('present checkout with custon config');
+   } on PlatformException catch (e) {
+     print('Platform exception: ${e.message}');
+   }
 
-    setState(() {
-      // Update UI..
-    });
-  }
+   setState(() {
+     // Update UI..
+   });
+}
 ```
 
 7. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
@@ -197,38 +198,39 @@ Note: it is important to call `FlutterResult` callback in `iOS` code. In this wa
 // MARK: - VGSCheckoutDelegate
 
 extension CustomConfigChannel: VGSCheckoutDelegate {
-	func checkoutDidCancel() {
-		flutterMethodChannel.invokeMethod("handleCancelCheckout", arguments: nil)
-	}
+  func checkoutDidCancel() {
+    flutterMethodChannel.invokeMethod("handleCancelCheckout", arguments: nil)
+  }
 
-	func checkoutDidFinish(with requestResult: VGSCheckoutRequestResult) {
-    
+  func checkoutDidFinish(with requestResult: VGSCheckoutRequestResult) {
+
     var title = ""
-		var message = ""
+    var message = ""
 
-		switch requestResult {
-		case .success(let statusCode, let data, let response, let info):
-			title = "Checkout status: Success!"
-			message = "status code is: \(statusCode)"
-			let text = DemoAppResponseParser.stringifySuccessResponse(from: data) ?? ""
+    switch requestResult {
+    case .success(let statusCode, let data, let response, let info):
+      title = "Checkout status: Success!"
+      message = "status code is: \(statusCode)"
+      let text = DemoAppResponseParser.stringifySuccessResponse(from: data) ?? ""
 
-			var payload = [String: Any]()
-			payload["STATUS"] = "FINISHED_SUCCESS"
-			payload["DESCRIPTION"] = text
-			payload["DATA"] = DemoAppResponseParser.convertToJSON(from: data)
+      var payload = [String: Any]()
+      payload["STATUS"] = "FINISHED_SUCCESS"
+      payload["DESCRIPTION"] = text
+      payload["DATA"] = DemoAppResponseParser.convertToJSON(from: data)
 
-			flutterMethodChannel.invokeMethod("handleCheckoutSuccess", arguments: payload)
-		case .failure(let statusCode, let data, let response, let error, let info):
-			title = "Checkout status: Failed!"
-			message = "status code is: \(statusCode) error: \(error?.localizedDescription ?? "Uknown error!")"
+      flutterMethodChannel.invokeMethod("handleCheckoutSuccess", arguments: payload)
+    case .failure(let statusCode, let data, let response, let error, let info):
+      title = "Checkout status: Failed!"
+      message = "status code is: \(statusCode) error: \(error?.localizedDescription ?? "Uknown error!")"
 
-			var payload = [String: Any]()
-			payload["STATUS"] = "FINISHED_ERROR"
-			payload["DATA"] = message
-			flutterMethodChannel.invokeMethod("handleCheckoutFail", arguments: payload)
-		}
-	}
+      var payload = [String: Any]()
+      payload["STATUS"] = "FINISHED_ERROR"
+      payload["DATA"] = message
+      flutterMethodChannel.invokeMethod("handleCheckoutFail", arguments: payload)
+    }
+  }
 }
+
 ```
 
 8. Register Method and Event Channels in your `AppDelegate`.
@@ -240,33 +242,32 @@ import Flutter
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
-
-	// Checkout custom config channel.
-	var checkoutCustomConfigChannel: CustomConfigChannel?
-
-	// Checkout pay opt add card config channel.
-	var checkoutPayoptAddCardConfigChannel: PayOptAddCardConfigChannel?
-
-	//no:doc
+  
+  // Checkout custom config channel.
+  var checkoutCustomConfigChannel: CustomConfigChannel?
+  
+  // Checkout pay opt add card config channel.
+  var checkoutPayoptAddCardConfigChannel: PayOptAddCardConfigChannel?
+  
+  //no:doc
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-
-		// Get current root view controller (`root` widget) to present Checkout.
-		let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-
-  // Register custom config method channel.
-	checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
-
-	// Register payopt add card config method channel.
-	checkoutPayoptAddCardConfigChannel = PayOptAddCardConfigChannel(messenger: controller.binaryMessenger)
-
-	GeneratedPluginRegistrant.register(with: self)
+    
+    // Get current root view controller (`root` widget) to present Checkout.
+    let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+    
+    // Register custom config method channel.
+    checkoutCustomConfigChannel = CustomConfigChannel(messenger: controller.binaryMessenger)
+    
+    // Register payopt add card config method channel.
+    checkoutPayoptAddCardConfigChannel = PayOptAddCardConfigChannel(messenger: controller.binaryMessenger)
+    
+    GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
-
 ```
 
 9. Handle methods invocation from native code in your Flutter code using `setMethodCallHandler`.
