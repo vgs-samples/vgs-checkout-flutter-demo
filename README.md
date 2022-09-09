@@ -3,7 +3,17 @@
 This demo shows how to integrate VGS Checkout [iOS](https://github.com/verygoodsecurity/vgs-checkout-ios) and [Android](https://github.com/verygoodsecurity/vgs-checkout-android) SDK to your Flutter app.
 We don't have official Flutter package. You can easily integrate VGS Checkout SDK into your mobile crossplatform Flutter apps.
 
-## Run application.
+# Table of contents
+
+<!--ts-->
+
+- [Run iOS application](#run-ios-application)
+- [Run Android application](#run-android-application)
+- [iOS integration guide](#ios-integration-guide)
+- [Android integration guide](#android-integration-guide)
+<!--te-->
+
+## Run iOS application
 
 1. Required environment:
 
@@ -75,7 +85,11 @@ class AppConstants {
 	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
 </p>
 
-## Integrate VGS Checkout SDK native iOS code with Flutter app
+## Run Android application
+
+TODO: - add android
+
+## iOS integration guide
 
 General integration overview:
 
@@ -362,3 +376,7 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
 ```
 
 11. Checkout will be presented as a separate screen like fullscreen modal `Widget` with its own `Scaffold` and `AppBar` presented by iOS `UINavigationController` as native iOS UI control. You cannot add your own widgets on the Checkout page.
+
+## Android integration Guide
+
+TODO: - add android guide
