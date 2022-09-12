@@ -377,6 +377,6 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
 
 11. Checkout will be presented as a separate screen like fullscreen modal `Widget` with its own `Scaffold` and `AppBar` presented by iOS `UINavigationController` as native iOS UI control. You cannot add your own widgets on the Checkout page.
 
-## Android integration Guide
+## Android integration guide
 
 TODO: - add android guide
