@@ -85,10 +85,6 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
   }
 
   Future<void> _startCheckoutCustomConfig() async {
-    if (Platform.isAndroid) {
-      // TODO:
-      // Add Android implementation.
-    } else if (Platform.isIOS) {
       try {
         final checkoutResult = await platform
             .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig);
@@ -101,7 +97,6 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
       setState(() {
         // Update UI..
       });
-    }
   }
 
   @override
