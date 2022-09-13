@@ -2,12 +2,14 @@ package com.example.vgs_checkout_flutter_demo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.verygoodsecurity.vgscheckout.VGSCheckout
+import com.verygoodsecurity.vgscheckout.VGSCheckoutCallback
 import com.verygoodsecurity.vgscheckout.config.VGSCheckoutCustomConfig
 import com.verygoodsecurity.vgscheckout.config.networking.request.core.VGSCheckoutDataMergePolicy
 import com.verygoodsecurity.vgscheckout.config.ui.view.address.VGSCheckoutBillingAddressVisibility
+import com.verygoodsecurity.vgscheckout.model.VGSCheckoutResult
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -69,35 +71,51 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 }
 
-class MainFragment : FlutterFragment() {
+class MainFragment : FlutterFragment(), VGSCheckoutCallback {
 
     private lateinit var checkout: VGSCheckout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkout = VGSCheckout(this)
+        checkout = VGSCheckout(this, this)
         flutterEngine?.let {
-            CustomConfigChannel(it, checkout)
-            PayoptConfigChannel(it, checkout)
+            CustomConfigChannel(VAULT_ID, this, it)
+            PayoptConfigChannel(VAULT_ID, this, it)
         }
+    }
+
+    override fun onCheckoutResult(result: VGSCheckoutResult) {
+
+    }
+
+    private companion object {
+
+        const val VAULT_ID = "tntipgdjdyl"
     }
 }
 
-class CustomConfigChannel(
-    engine: FlutterEngine,
-    private val checkout: VGSCheckout
-) {
+class CustomConfigChannel(private val vaultId: String, fragment: Fragment, engine: FlutterEngine) :
+    VGSCheckoutCallback {
+
+    private var checkout: VGSCheckout
+    private var channel: MethodChannel
 
     init {
-        MethodChannel(
-            engine.dartExecutor.binaryMessenger,
-            CHANNEL_NAME
-        ).setMethodCallHandler { call, result ->
-            Log.d("Test", "CustomConfigChannel")
+        checkout = VGSCheckout(fragment)
+        channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
+        channel.setMethodCallHandler { call, result ->
             when (call.method) {
                 METHOD_NAME -> startCustomCheckoutConfig()
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    override fun onCheckoutResult(result: VGSCheckoutResult) {
+        when (result) {
+            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", {})
+            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", {})
+            is VGSCheckoutResult.Canceled -> channel.invokeMethod("handleCancelCheckout", null)
         }
     }
 
@@ -107,7 +125,7 @@ class CustomConfigChannel(
     }
 
     private fun createConfig(): VGSCheckoutCustomConfig {
-        return VGSCheckoutCustomConfig.Builder("tntipgdjdyl")
+        return VGSCheckoutCustomConfig.Builder(vaultId)
             .setCardHolderOptions("card_holder_name")
             .setCardNumberOptions("card_number")
             .setExpirationDateOptions("exp_data")
@@ -130,21 +148,28 @@ class CustomConfigChannel(
     }
 }
 
-class PayoptConfigChannel constructor(
-    engine: FlutterEngine,
-    private val checkout: VGSCheckout
-) {
+class PayoptConfigChannel(private val vaultId: String, fragment: Fragment, engine: FlutterEngine) :
+    VGSCheckoutCallback {
+
+    private var checkout: VGSCheckout
+    private var channel: MethodChannel
 
     init {
-        MethodChannel(
-            engine.dartExecutor.binaryMessenger,
-            NAME
-        ).setMethodCallHandler { call, result ->
-            Log.d("Test", "PayoptConfigChannel")
+        checkout = VGSCheckout(fragment)
+        channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
+        channel.setMethodCallHandler { call, result ->
             when (call.method) {
                 METHOD_NAME -> startPayoutCheckoutConfig()
                 else -> result.notImplemented()
             }
+        }
+    }
+
+    override fun onCheckoutResult(result: VGSCheckoutResult) {
+        when (result) {
+            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", {})
+            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", {})
+            is VGSCheckoutResult.Canceled -> channel.invokeMethod("handleCancelCheckout", null)
         }
     }
 
@@ -154,7 +179,7 @@ class PayoptConfigChannel constructor(
 
     private companion object {
 
-        const val NAME = "vgs.com.checkout/payoptAddCardConfig"
+        const val CHANNEL_NAME = "vgs.com.checkout/payoptAddCardConfig"
         const val METHOD_NAME = "startPayoutCheckoutConfig"
     }
 }
