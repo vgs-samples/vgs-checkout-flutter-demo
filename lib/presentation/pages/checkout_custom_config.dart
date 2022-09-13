@@ -93,7 +93,7 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
         final checkoutResult = await platform
             .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig);
 
-        print('present checkout with custon config');
+        print('present checkout with custom config');
       } on PlatformException catch (e) {
         print('Platform exception: ${e.message}');
       }
