@@ -106,10 +106,6 @@ class _CheckoutPayOptAddCardConfigState
   }
 
   Future<Map<dynamic, dynamic>?> _startCheckoutAddCardConfig() async {
-    if (Platform.isAndroid) {
-      // TODO:
-      // Add Android implementation.
-    } else if (Platform.isIOS) {
       try {
         final checkoutResult = await platform
             .invokeMethod(CheckoutMethodNames.startAddCardCheckoutConfig, {
@@ -151,7 +147,6 @@ class _CheckoutPayOptAddCardConfigState
 
       // Update UI.
       setState(() {});
-    }
   }
 
   void _fetchAccessToken() async {

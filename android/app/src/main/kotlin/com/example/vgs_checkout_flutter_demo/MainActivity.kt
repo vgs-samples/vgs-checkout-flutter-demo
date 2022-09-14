@@ -3,23 +3,15 @@ package com.example.vgs_checkout_flutter_demo
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.google.gson.Gson
-import com.verygoodsecurity.vgscheckout.VGSCheckout
-import com.verygoodsecurity.vgscheckout.VGSCheckoutCallback
-import com.verygoodsecurity.vgscheckout.config.VGSCheckoutCustomConfig
-import com.verygoodsecurity.vgscheckout.config.networking.request.core.VGSCheckoutDataMergePolicy
-import com.verygoodsecurity.vgscheckout.config.ui.view.address.VGSCheckoutBillingAddressVisibility
-import com.verygoodsecurity.vgscheckout.model.VGSCheckoutResult
-import com.verygoodsecurity.vgscheckout.model.VGSCheckoutResultBundle
-import com.verygoodsecurity.vgscheckout.model.response.VGSCheckoutCardResponse
+import com.example.vgs_checkout_flutter_demo.channel.CustomConfigChannel
+import com.example.vgs_checkout_flutter_demo.channel.PayoptConfigChannel
 import io.flutter.embedding.android.FlutterFragment
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
-import org.json.JSONObject
-import org.json.JSONStringer
 
 private const val FRAGMENT_TAG = " com.example.vgs_checkout_flutter_demo.main_fragment"
+
+// TODO: Refactor
+private const val VAULT_ID = "<VAULT_ID>"
+private const val PAYOUT_TENANT_ID = "tntipgdjdyl"
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -76,119 +68,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 }
 
-class MainFragment : FlutterFragment(), VGSCheckoutCallback {
-
-    private lateinit var checkout: VGSCheckout
+class MainFragment : FlutterFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkout = VGSCheckout(this, this)
         flutterEngine?.let {
             CustomConfigChannel(VAULT_ID, this, it)
-            PayoptConfigChannel(VAULT_ID, this, it)
+            PayoptConfigChannel(PAYOUT_TENANT_ID, this, it)
         }
-    }
-
-    override fun onCheckoutResult(result: VGSCheckoutResult) {
-
-    }
-
-    private companion object {
-
-        const val VAULT_ID = "tntpszqgikn"
-    }
-}
-
-class CustomConfigChannel(private val vaultId: String, fragment: Fragment, engine: FlutterEngine) :
-    VGSCheckoutCallback {
-
-    private var checkout: VGSCheckout
-    private var channel: MethodChannel
-
-    init {
-        checkout = VGSCheckout(fragment, this)
-        channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
-        channel.setMethodCallHandler { call, result ->
-            when (call.method) {
-                METHOD_NAME -> startCustomCheckoutConfig()
-                else -> result.notImplemented()
-            }
-        }
-    }
-
-    override fun onCheckoutResult(result: VGSCheckoutResult) {
-        val response = result.data.getParcelable<VGSCheckoutCardResponse>(VGSCheckoutResultBundle.ADD_CARD_RESPONSE)?.body
-        val data = mapOf<String, Any?>(
-            "DATA" to Gson().fromJson(response, Map::class.java)
-        )
-        when (result) {
-            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", data)
-            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", data)
-            is VGSCheckoutResult.Canceled -> channel.invokeMethod("handleCancelCheckout", null)
-        }
-    }
-
-    private fun startCustomCheckoutConfig() {
-        val config = createConfig()
-        checkout.present(config)
-    }
-
-    private fun createConfig(): VGSCheckoutCustomConfig {
-        return VGSCheckoutCustomConfig.Builder(vaultId)
-            .setCardHolderOptions("card_holder_name")
-            .setCardNumberOptions("card_number")
-            .setExpirationDateOptions("exp_data")
-            .setCVCOptions("card_cvc")
-            .setBillingAddressVisibility(VGSCheckoutBillingAddressVisibility.VISIBLE)
-            .setCountryOptions("billing_address.country")
-            .setCityOptions("billing_address.city")
-            .setAddressOptions("billing_address.addressLine1")
-            .setOptionalAddressOptions("billing_address.addressLine2")
-            .setPostalCodeOptions("billing_address.postal_code")
-            .setMergePolicy(VGSCheckoutDataMergePolicy.NESTED_JSON)
-            .setPath("post")
-            .build()
-    }
-
-    private companion object {
-
-        const val CHANNEL_NAME = "vgs.com.checkout/customConfig"
-        const val METHOD_NAME = "startCustomCheckoutConfig"
-    }
-}
-
-class PayoptConfigChannel(private val vaultId: String, fragment: Fragment, engine: FlutterEngine) :
-    VGSCheckoutCallback {
-
-    private var checkout: VGSCheckout
-    private var channel: MethodChannel
-
-    init {
-        checkout = VGSCheckout(fragment)
-        channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
-        channel.setMethodCallHandler { call, result ->
-            when (call.method) {
-                METHOD_NAME -> startPayoutCheckoutConfig()
-                else -> result.notImplemented()
-            }
-        }
-    }
-
-    override fun onCheckoutResult(result: VGSCheckoutResult) {
-        when (result) {
-            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", {})
-            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", {})
-            is VGSCheckoutResult.Canceled -> channel.invokeMethod("handleCancelCheckout", null)
-        }
-    }
-
-    private fun startPayoutCheckoutConfig() {
-
-    }
-
-    private companion object {
-
-        const val CHANNEL_NAME = "vgs.com.checkout/payoptAddCardConfig"
-        const val METHOD_NAME = "startPayoutCheckoutConfig"
     }
 }
