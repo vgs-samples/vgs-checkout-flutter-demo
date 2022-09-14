@@ -4,15 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.gson.Gson
 import com.verygoodsecurity.vgscheckout.VGSCheckout
 import com.verygoodsecurity.vgscheckout.VGSCheckoutCallback
 import com.verygoodsecurity.vgscheckout.config.VGSCheckoutCustomConfig
 import com.verygoodsecurity.vgscheckout.config.networking.request.core.VGSCheckoutDataMergePolicy
 import com.verygoodsecurity.vgscheckout.config.ui.view.address.VGSCheckoutBillingAddressVisibility
 import com.verygoodsecurity.vgscheckout.model.VGSCheckoutResult
+import com.verygoodsecurity.vgscheckout.model.VGSCheckoutResultBundle
+import com.verygoodsecurity.vgscheckout.model.response.VGSCheckoutCardResponse
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import org.json.JSONObject
+import org.json.JSONStringer
 
 private const val FRAGMENT_TAG = " com.example.vgs_checkout_flutter_demo.main_fragment"
 
@@ -90,7 +95,7 @@ class MainFragment : FlutterFragment(), VGSCheckoutCallback {
 
     private companion object {
 
-        const val VAULT_ID = "tntipgdjdyl"
+        const val VAULT_ID = "tntpszqgikn"
     }
 }
 
@@ -101,7 +106,7 @@ class CustomConfigChannel(private val vaultId: String, fragment: Fragment, engin
     private var channel: MethodChannel
 
     init {
-        checkout = VGSCheckout(fragment)
+        checkout = VGSCheckout(fragment, this)
         channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler { call, result ->
             when (call.method) {
@@ -112,9 +117,13 @@ class CustomConfigChannel(private val vaultId: String, fragment: Fragment, engin
     }
 
     override fun onCheckoutResult(result: VGSCheckoutResult) {
+        val response = result.data.getParcelable<VGSCheckoutCardResponse>(VGSCheckoutResultBundle.ADD_CARD_RESPONSE)?.body
+        val data = mapOf<String, Any?>(
+            "DATA" to Gson().fromJson(response, Map::class.java)
+        )
         when (result) {
-            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", {})
-            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", {})
+            is VGSCheckoutResult.Success -> channel.invokeMethod("handleCheckoutSuccess", data)
+            is VGSCheckoutResult.Failed -> channel.invokeMethod("handleCheckoutFail", data)
             is VGSCheckoutResult.Canceled -> channel.invokeMethod("handleCancelCheckout", null)
         }
     }
