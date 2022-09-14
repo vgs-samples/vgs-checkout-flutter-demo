@@ -9,7 +9,6 @@ import io.flutter.embedding.android.FlutterFragment
 
 private const val FRAGMENT_TAG = " com.example.vgs_checkout_flutter_demo.main_fragment"
 
-// TODO: Refactor
 private const val VAULT_ID = "<VAULT_ID>"
 private const val PAYOUT_TENANT_ID = "<PAYOUT_TENANT_ID>"
 
