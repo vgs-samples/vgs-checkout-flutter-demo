@@ -27,17 +27,17 @@ class CheckoutUseCases extends StatelessWidget {
                 title: 'Checkout Custom Config',
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, RouteNames.kPayOptAddCardConfig);
-              },
-              child: CheckoutUseCaseItem(
-                title: 'Checkout PayOpt Add Card Config',
-              ),
-            )
+            // SizedBox(
+            //   height: 8,
+            // ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.pushNamed(context, RouteNames.kPayOptAddCardConfig);
+            //   },
+            //   child: CheckoutUseCaseItem(
+            //     title: 'Checkout PayOpt Add Card Config',
+            //   ),
+            // )
           ],
         ),
       ),
