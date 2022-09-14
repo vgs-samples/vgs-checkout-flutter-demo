@@ -11,7 +11,7 @@ private const val FRAGMENT_TAG = " com.example.vgs_checkout_flutter_demo.main_fr
 
 // TODO: Refactor
 private const val VAULT_ID = "<VAULT_ID>"
-private const val PAYOUT_TENANT_ID = "tntipgdjdyl"
+private const val PAYOUT_TENANT_ID = "<PAYOUT_TENANT_ID>"
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -68,6 +68,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 }
 
+// We need to use FlutterFragment because Flatter Activity uses deprecated way of handling onActivityResult.
 class MainFragment : FlutterFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
