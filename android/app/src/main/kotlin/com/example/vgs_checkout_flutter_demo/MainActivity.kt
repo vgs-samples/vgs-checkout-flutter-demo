@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 }
 
-// We need to use FlutterFragment because Flatter Activity uses deprecated way of handling onActivityResult.
+/** We need to use FlutterFragment because Flatter Activity uses deprecated way of handling onActivityResult. */
 class MainFragment : FlutterFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
