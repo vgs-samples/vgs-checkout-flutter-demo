@@ -67,7 +67,7 @@ class AppConstants {
 ```
 
 <p align="center">
-	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
+	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
 </p>
 
 ## iOS integration guide
@@ -75,7 +75,7 @@ class AppConstants {
 General integration overview:
 
 <p align="center">
-	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
+	<img src="images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
 </p>
 
 1. Review official Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
@@ -374,7 +374,7 @@ General integration overview:
 	<img src="images/checkout_flutter_android_integration.png" alt="VGS Checkout Android Flutter integration diagram">
 </p>
 
-1. Add latest version of VGS Checkout SDK into your `app/build.gradle`:
+1. Add latest version of VGS Checkout SDK into your `android/app/build.gradle`:
 
 ```groovy
 dependencies {
