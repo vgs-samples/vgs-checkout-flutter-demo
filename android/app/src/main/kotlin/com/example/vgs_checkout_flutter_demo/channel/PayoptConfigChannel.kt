@@ -80,10 +80,10 @@ class PayoptConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSChecko
         savedCards: List<String>,
         initListener: VGSCheckoutOnInitListener
     ): VGSCheckoutCancellable? {
-        Log.d("PayoptConfigChannel", tenantId)
-        Log.d("PayoptConfigChannel", environment)
-        Log.d("PayoptConfigChannel", accessToken)
-        Log.d("PayoptConfigChannel", savedCards.toString())
+        Log.d("CustomConfigChannel", "tenantId = $tenantId")
+        Log.d("CustomConfigChannel", "environment = $environment")
+        Log.d("PayoptConfigChannel", "accessToken = $accessToken")
+        Log.d("PayoptConfigChannel", "savedCards = $savedCards")
         checkout.onCheckoutInitListener = initListener
         return checkout.present(
             VGSCheckoutAddCardConfig.Builder(tenantId)

@@ -46,8 +46,8 @@ class CustomConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSChecko
     }
 
     private fun startCustomCheckoutConfig(vaultId: String, environment: String) {
-        Log.d("CustomConfigChannel", vaultId)
-        Log.d("CustomConfigChannel", environment)
+        Log.d("CustomConfigChannel", "vaultId = $vaultId")
+        Log.d("CustomConfigChannel", "environment = $environment")
         val config = createConfig(vaultId, environment)
         checkout.present(config)
     }
