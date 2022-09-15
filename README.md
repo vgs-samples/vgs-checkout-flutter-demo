@@ -36,28 +36,13 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
   pod install
 ```
 
-3. `cd` to `ios/Runner/Models/DemoAppConfiguration` and find
-   `DemoAppConfiguration.swift` file.
-   Set your `vault_id` for custom configuation, `environment`, `tenant_id` for payment orchestration add card setup.
+3. `cd` to `lib/utils/constants` Find `checkout_constants.dart` file and set your `vault_id` for custom configuration, `environment` and `tenant_id` for payment orchestration.
 
-```swift
-/// Setup your configuration details here.
-class DemoAppConfiguration {
-
-	/// Shared instance.
-	static let shared = DemoAppConfiguration()
-
-	/// no:doc
-	private init() {}
-
-	/// Set your vault id here. https://www.verygoodsecurity.com/terminology/nomenclature#vault
-	var vaultId = "VAULT_ID"
-
-	/// Set tenant id matching your payment orchestration configuration.
-	var paymentOrchestrationTenantId = "TENANT_ID"
-
-	/// Set environment - `sandbox` for testing or `live` for production.
-	var environment = "sandbox"
+```dart
+class CheckoutSetupConstants {
+   static const String vaultId = 'vault_id'; // For custom config
+   static const String tenantId = 'tenant_id'; // For payopt config
+   static const String environment = 'environment';
 }
 ```
 
