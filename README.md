@@ -368,8 +368,10 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
 
 ## Android integration guide
 
+General integration overview:
+
 <p align="center">
-	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_android_integration.png" alt="VGS Checkout Android Flutter integration diagram">
+	<img src="images/checkout_flutter_android_integration.png" alt="VGS Checkout Android Flutter integration diagram">
 </p>
 
 1. Add latest version of VGS Checkout SDK into your `app/build.gradle`:
