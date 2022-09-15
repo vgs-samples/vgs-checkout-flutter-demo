@@ -101,7 +101,7 @@ class PayoptConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSChecko
         data["STATUS"] = if (result is Success) "FINISHED_SUCCESS" else "FINISHED_ERROR"
         data["PAYMENT_METHOD"] = if (isPreSavedCard) "SAVED_CARD" else "NEW_CARD"
         if (!isPreSavedCard) data["SHOULD_SAVE_CARD"] = result.data.getBoolean(SHOULD_SAVE_CARD)
-        data["DATA"] = Gson().fromJson(card, Map::class.java)
+        if (!card.isNullOrEmpty()) data["DATA"] = Gson().fromJson(card, Map::class.java)
         data["DESCRIPTION"] = "Success: \n $card"
         return data
     }

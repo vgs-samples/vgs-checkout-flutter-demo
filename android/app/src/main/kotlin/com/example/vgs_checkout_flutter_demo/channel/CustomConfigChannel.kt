@@ -74,7 +74,7 @@ class CustomConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSChecko
         val data = mutableMapOf<String, Any>()
         val response = result.data.getParcelable<VGSCheckoutCardResponse>(ADD_CARD_RESPONSE)?.body
         data["STATUS"] = if (result is Success) "FINISHED_SUCCESS" else "FINISHED_ERROR"
-        data["DATA"] = Gson().fromJson(response, Map::class.java)
+        if (!response.isNullOrEmpty()) data["DATA"] = Gson().fromJson(response, Map::class.java)
         data["DESCRIPTION"] = "Success: \n $response"
         return data
     }
