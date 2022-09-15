@@ -8,7 +8,6 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 <!--ts-->
 
 - [Run application](#run-application)
-- [Run Android application](#run-android-application)
 - [iOS integration guide](#ios-integration-guide)
 - [Android integration guide](#android-integration-guide)
 <!--te-->
