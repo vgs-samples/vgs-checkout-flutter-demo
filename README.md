@@ -78,7 +78,7 @@ General integration overview:
 	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
 </p>
 
-1. Review offical Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
+1. Review official Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
 
 2. Install `VGS Checkout SDK` via `CocoaPods`. If you have created from scratch Flutter project usually you need to preinstall `CocoaPods`. `cd` to `ios` folder and run:
 
@@ -184,10 +184,10 @@ Future<void> _startCheckoutCustomConfig() async {
 }
 ```
 
-7. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
+7. Implement `VGSCheckoutDelegate` interface in your native channel implementation.
    VGS Checkout cannot emit events to Flutter code directly. It provides `VGSCheckoutDelegate` with a set of methods.
    A delegate is just a class that does some work for another class and instances are usually linked by weak reference.
-   You need to listen to `VGSCheckoutDelegate` methods and invoce methods in Flutter code using `invokeMethod`.
+   You need to listen to `VGSCheckoutDelegate` methods and invoice methods in Flutter code using `invokeMethod`.
    It is up to you how to send and parse arguments payload.
    A suitable data structure can be Swift dictionary of type `[String: Any]` which will be transmitted as `Map<dynamic, dynamic>` in Flutter code.
 
@@ -368,4 +368,23 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
 
 ## Android integration guide
 
-TODO: - add android guide
+<p align="center">
+	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_android_integration.png" alt="VGS Checkout Android Flutter integration diagram">
+</p>
+
+1. Add latest version of VGS Checkout SDK into your `app/build.gradle`:
+
+```groovy
+dependencies {
+    
+    implementation "com.verygoodsecurity:vgscheckout:latest_version"
+}
+```
+
+2. Review official Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
+
+3. Check our implementation [example](https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/android/app/src/main/kotlin/com/example/vgs_checkout_flutter_demo).
+
+> **_NOTE:_** We used `FlutterFragment` reference to initialize `VGSCheckout` because current `FlutterActivity`
+> does not support `registerForActivityResult` feature which is required by `VGSCheckout`. This setup flow 
+> can be refactored in next Flutter updates if `FlutterActivity` parent will be updated to `AppCompatActivity`.
