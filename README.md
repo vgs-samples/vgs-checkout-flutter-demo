@@ -36,7 +36,7 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
   pod install
 ```
 
-3. `cd` to `lib/utils` Find `checkout_constants.dart` file and set your `vault_id` for custom configuration, `environment` and `tenant_id` for payment orchestration.
+3. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` for custom configuration, `environment` and `tenant_id` for payment orchestration.
 
 ```dart
 class CheckoutSetupConstants {
@@ -46,7 +46,7 @@ class CheckoutSetupConstants {
 }
 ```
 
-4. Go back to root project folder and `cd` to `lib/utils`.
+4. In same directory `lib/utils`.
    Find `constants.dart` file and setup your custom backend api client URL if you need to test Payment Orchestration integration.
 
 ```dart
@@ -56,8 +56,8 @@ class AppConstants {
 }
 ```
 
-5. Run flutter app:
-   Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).
+5. Run flutter app:\
+   Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).\
    Run the Android application on Simulator (<a href="https://docs.flutter.dev/get-started/install/macos#set-up-the-android-emulator" target="_blank">Run Android app Flutter docs</a>).
 
 6. In case of possible issues a common fix is to clean project and reinstall packages:
