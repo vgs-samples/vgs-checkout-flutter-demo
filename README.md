@@ -7,13 +7,13 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 
 <!--ts-->
 
-- [Run iOS application](#run-ios-application)
+- [Run application](#run-application)
 - [Run Android application](#run-android-application)
 - [iOS integration guide](#ios-integration-guide)
 - [Android integration guide](#android-integration-guide)
 <!--te-->
 
-## Run iOS application
+## Run application
 
 1. Required environment:
 
@@ -61,7 +61,7 @@ class DemoAppConfiguration {
 }
 ```
 
-4. go back to root project folder and `cd` to `lib/utils/constants`.
+4. Go back to root project folder and `cd` to `lib/utils/constants`.
    Find `constants.dart` file and setup your custom backend api client URL if you need to test Payment Orchestration integration.
 
 ```dart
@@ -71,10 +71,11 @@ class AppConstants {
 }
 ```
 
-5. run flutter app on iOS simulator
+5. Run flutter app:
    Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).
+   Run the Android application on Simulator (<a href="https://docs.flutter.dev/get-started/install/macos#set-up-the-android-emulator" target="_blank">Run Android app Flutter docs</a>).
 
-6. in case of possible issues a common fix is to clean project and reinstall packages:
+6. In case of possible issues a common fix is to clean project and reinstall packages:
 
 ```bash
   flutter clean
@@ -84,10 +85,6 @@ class AppConstants {
 <p align="center">
 	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
 </p>
-
-## Run Android application
-
-TODO: - add android
 
 ## iOS integration guide
 
@@ -188,15 +185,17 @@ static const platform = MethodChannel('vgs.com.checkout/customConfig');
 // On button tap send `startCustomCheckoutConfig` message to native iOS code.
 Future<void> _startCheckoutCustomConfig() async {
    try {
-     final checkoutResult =
-          await platform.invokeMethod('startCustomCheckoutConfig');
-     print('present checkout with custon config');
+      final checkoutResult = await platform
+              .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig, {
+         'vaultId': CheckoutSetupConstants.vaultId,
+         'environment': CheckoutSetupConstants.environment
+      });
+      print('present checkout with custom config');
    } on PlatformException catch (e) {
-     print('Platform exception: ${e.message}');
+      print('Platform exception: ${e.message}');
    }
-
    setState(() {
-     // Update UI..
+      // Update UI..
    });
 }
 ```
@@ -284,19 +283,19 @@ import Flutter
 }
 ```
 
-9. Define constants for method names and payload.
+9. Define constants for method names, payload and checkout setup.
 
 ```dart
 class CheckoutEventConstants {
-  static const String kStatus = 'STATUS';
-  static const String kFinishedSuccess = 'FINISHED_SUCCESS';
-  static const String kFinishedError = 'FINISHED_ERROR';
-  static const String kStatusCode = 'STATUS_CODE';
-  static const String kPaymentMethod = 'PAYMENT_METHOD';
-  static const String kShouldSaveCard = 'SHOULD_SAVE_CARD';
-  static const String kData = 'DATA';
-  static const String kDescription = 'DESCRIPTION';
-  static const String kCancelled = 'CANCELLED';
+   static const String status = 'STATUS';
+   static const String finishedSuccess = 'FINISHED_SUCCESS';
+   static const String finishedError = 'FINISHED_ERROR';
+   static const String statusCode = 'STATUS_CODE';
+   static const String paymentMethod = 'PAYMENT_METHOD';
+   static const String shouldSaveCard = 'SHOULD_SAVE_CARD';
+   static const String data = 'DATA';
+   static const String description = 'DESCRIPTION';
+   static const String cancelled = 'CANCELLED';
 }
 
 class CheckoutMethodNames {
@@ -305,6 +304,12 @@ class CheckoutMethodNames {
   static const String handleCheckoutFail = 'handleCheckoutFail';
   static const String startCustomCheckoutConfig = 'startCustomCheckoutConfig';
   static const String startAddCardCheckoutConfig = 'startCheckoutAddCardConfig';
+}
+
+class CheckoutSetupConstants {
+   static const String vaultId = 'vault_id';
+   static const String tenantId = 'tenant_id';
+   static const String environment = 'environment';
 }
 ```
 
@@ -330,17 +335,17 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (eventData[CheckoutEventConstants.kData]
+          if (eventData[CheckoutEventConstants.data]
               is Map<dynamic, dynamic>) {
-            final data = eventData[CheckoutEventConstants.kData]
+            final data = eventData[CheckoutEventConstants.data]
                 as Map<dynamic, dynamic>;
             final json = new Map<String, dynamic>.from(data);
             print('custom config json: ${json}');
           }
 
-          if (eventData[CheckoutEventConstants.kDescription] is String) {
+          if (eventData[CheckoutEventConstants.description] is String) {
             final description =
-                eventData[CheckoutEventConstants.kDescription] as String;
+                eventData[CheckoutEventConstants.description] as String;
             textToDisplay = 'Checkout did finish successfully!\n$description';
           }
 
@@ -350,8 +355,8 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
       case CheckoutMethodNames.handleCheckoutFail:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (arguments[CheckoutEventConstants.kData] is String) {
-            final errorText = eventData[CheckoutEventConstants.kData] as String;
+          if (arguments[CheckoutEventConstants.data] is String) {
+            final errorText = eventData[CheckoutEventConstants.data] as String;
             textToDisplay = 'Checkout did failed\n$errorText';
           }
         }

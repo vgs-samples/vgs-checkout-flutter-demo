@@ -7,7 +7,7 @@ import '../widgets/order_summary_widget.dart';
 import '../widgets/scrollable_text_widget.dart';
 import '../../services/order_data_provider.dart';
 import '../../utils/snackbar_utils.dart';
-import '../../utils/checkout_event_constants.dart';
+import '../../utils/checkout_constants.dart';
 
 class CheckoutCustomConfig extends StatefulWidget {
   const CheckoutCustomConfig({Key? key}) : super(key: key);
@@ -41,17 +41,17 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (eventData[CheckoutEventConstants.kData]
+          if (eventData[CheckoutEventConstants.data]
               is Map<dynamic, dynamic>) {
-            final data = eventData[CheckoutEventConstants.kData]
+            final data = eventData[CheckoutEventConstants.data]
                 as Map<dynamic, dynamic>;
             final json = new Map<String, dynamic>.from(data);
             print('custom config json: ${json}');
           }
 
-          if (eventData[CheckoutEventConstants.kDescription] is String) {
+          if (eventData[CheckoutEventConstants.description] is String) {
             final description =
-                eventData[CheckoutEventConstants.kDescription] as String;
+                eventData[CheckoutEventConstants.description] as String;
             textToDisplay = 'Checkout did finish successfully!\n$description';
           }
 
@@ -61,8 +61,8 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
       case CheckoutMethodNames.handleCheckoutFail:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (arguments[CheckoutEventConstants.kData] is String) {
-            final errorText = eventData[CheckoutEventConstants.kData] as String;
+          if (arguments[CheckoutEventConstants.data] is String) {
+            final errorText = eventData[CheckoutEventConstants.data] as String;
             textToDisplay = 'Checkout did failed\n$errorText';
           }
         }
@@ -85,18 +85,19 @@ class _CheckoutCustomConfigState extends State<CheckoutCustomConfig> {
   }
 
   Future<void> _startCheckoutCustomConfig() async {
-      try {
-        final checkoutResult = await platform
-            .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig);
-
-        print('present checkout with custom config');
-      } on PlatformException catch (e) {
-        print('Platform exception: ${e.message}');
-      }
-
-      setState(() {
-        // Update UI..
+    try {
+      final checkoutResult = await platform
+          .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig, {
+        'vault_id': CheckoutSetupConstants.vaultId,
+        'environment': CheckoutSetupConstants.environment
       });
+      print('present checkout with custom config');
+    } on PlatformException catch (e) {
+      print('Platform exception: ${e.message}');
+    }
+    setState(() {
+      // Update UI..
+    });
   }
 
   @override

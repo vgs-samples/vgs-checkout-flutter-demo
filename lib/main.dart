@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const CheckoutUseCases(),
       routes: {
-        RouteNames.kCustomConfig: (context) => const CheckoutCustomConfig(),
-        RouteNames.kPayOptAddCardConfig: (context) =>
-            const CheckoutPayoptAddCardConfig(),
+        RouteNames.customConfig: (context) => const CheckoutCustomConfig(),
+        // RouteNames.payOptAddCardConfig: (context) =>
+        //     const CheckoutPayoptAddCardConfig(),
       },
     );
   }

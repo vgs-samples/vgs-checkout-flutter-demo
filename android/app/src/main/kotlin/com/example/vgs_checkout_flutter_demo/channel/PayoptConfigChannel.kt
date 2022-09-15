@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.vgs_checkout_flutter_demo.utils.toEnvironment
 import com.google.gson.Gson
 import com.verygoodsecurity.vgscheckout.VGSCheckout
 import com.verygoodsecurity.vgscheckout.VGSCheckoutCallback
@@ -20,11 +21,7 @@ import com.verygoodsecurity.vgscheckout.networking.command.core.VGSCheckoutCance
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class PayoptConfigChannel(
-    private val tenantId: String,
-    fragment: Fragment,
-    engine: FlutterEngine
-) : VGSCheckoutCallback {
+class PayoptConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSCheckoutCallback {
 
     private var checkout: VGSCheckout
     private var channel: MethodChannel
@@ -43,6 +40,8 @@ class PayoptConfigChannel(
             val arguments = call.arguments as HashMap<*, *>
             when (call.method) {
                 METHOD_NAME -> cancellable = startPayoutCheckoutConfig(
+                    arguments["tenant_id"] as String,
+                    arguments["environment"] as String,
                     arguments["access_token"] as String,
                     (arguments["saved_fin_ids"] as ArrayList<*>).mapNotNull { it as? String },
                     object : VGSCheckoutOnInitListener {
@@ -75,15 +74,20 @@ class PayoptConfigChannel(
     }
 
     private fun startPayoutCheckoutConfig(
+        tenantId: String,
+        environment: String,
         accessToken: String,
         savedCards: List<String>,
         initListener: VGSCheckoutOnInitListener
     ): VGSCheckoutCancellable? {
+        Log.d("PayoptConfigChannel", tenantId)
+        Log.d("PayoptConfigChannel", environment)
         Log.d("PayoptConfigChannel", accessToken)
         Log.d("PayoptConfigChannel", savedCards.toString())
         checkout.onCheckoutInitListener = initListener
         return checkout.present(
             VGSCheckoutAddCardConfig.Builder(tenantId)
+                .setEnvironment(environment.toEnvironment())
                 .setAccessToken(accessToken)
                 .setSavedCardsIds(savedCards)
                 .build()

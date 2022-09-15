@@ -14,7 +14,7 @@ class FetchAccessTokenNotFoundError extends Failure {}
 class CustomBackendApiClient {
   Future<Either<Failure, String>> getAccessToken() async {
     final url = Uri.parse(
-        AppConstants.kPaymentOrchestrationServicePath + 'get-auth-token');
+        AppConstants.paymentOrchestrationServicePath + 'get-auth-token');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},

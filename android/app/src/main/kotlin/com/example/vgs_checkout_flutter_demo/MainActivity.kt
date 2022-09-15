@@ -9,9 +9,6 @@ import io.flutter.embedding.android.FlutterFragment
 
 private const val FRAGMENT_TAG = " com.example.vgs_checkout_flutter_demo.main_fragment"
 
-private const val VAULT_ID = "<VAULT_ID>"
-private const val PAYOUT_TENANT_ID = "<PAYOUT_TENANT_ID>"
-
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private var fragment: FlutterFragment? = null
@@ -73,8 +70,8 @@ class MainFragment : FlutterFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         flutterEngine?.let {
-            CustomConfigChannel(VAULT_ID, this, it)
-            PayoptConfigChannel(PAYOUT_TENANT_ID, this, it)
+            CustomConfigChannel(this, it)
+            PayoptConfigChannel(this, it)
         }
     }
 }

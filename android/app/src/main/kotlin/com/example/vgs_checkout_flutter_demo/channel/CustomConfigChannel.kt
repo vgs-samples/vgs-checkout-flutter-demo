@@ -1,6 +1,8 @@
 package com.example.vgs_checkout_flutter_demo.channel
 
+import android.util.Log
 import androidx.fragment.app.Fragment
+import com.example.vgs_checkout_flutter_demo.utils.toEnvironment
 import com.google.gson.Gson
 import com.verygoodsecurity.vgscheckout.VGSCheckout
 import com.verygoodsecurity.vgscheckout.VGSCheckoutCallback
@@ -14,11 +16,7 @@ import com.verygoodsecurity.vgscheckout.model.response.VGSCheckoutCardResponse
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class CustomConfigChannel(
-    private val vaultId: String,
-    fragment: Fragment,
-    engine: FlutterEngine
-) : VGSCheckoutCallback {
+class CustomConfigChannel(fragment: Fragment, engine: FlutterEngine) : VGSCheckoutCallback {
 
     private var checkout: VGSCheckout
     private var channel: MethodChannel
@@ -27,8 +25,12 @@ class CustomConfigChannel(
         checkout = VGSCheckout(fragment, this)
         channel = MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler { call, result ->
+            val arguments = call.arguments as HashMap<*, *>
             when (call.method) {
-                METHOD_NAME -> startCustomCheckoutConfig()
+                METHOD_NAME -> startCustomCheckoutConfig(
+                    arguments["vault_id"] as String,
+                    arguments["environment"] as String
+                )
                 else -> result.notImplemented()
             }
         }
@@ -43,13 +45,16 @@ class CustomConfigChannel(
         }
     }
 
-    private fun startCustomCheckoutConfig() {
-        val config = createConfig()
+    private fun startCustomCheckoutConfig(vaultId: String, environment: String) {
+        Log.d("CustomConfigChannel", vaultId)
+        Log.d("CustomConfigChannel", environment)
+        val config = createConfig(vaultId, environment)
         checkout.present(config)
     }
 
-    private fun createConfig(): VGSCheckoutCustomConfig {
+    private fun createConfig(vaultId: String, environment: String): VGSCheckoutCustomConfig {
         return VGSCheckoutCustomConfig.Builder(vaultId)
+            .setEnvironment(environment.toEnvironment())
             .setCardHolderOptions("card_holder_name")
             .setCardNumberOptions("card_number")
             .setExpirationDateOptions("exp_data")

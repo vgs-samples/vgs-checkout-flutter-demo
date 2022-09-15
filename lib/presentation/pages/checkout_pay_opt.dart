@@ -7,7 +7,7 @@ import '../../api/custom_backend_api_client.dart';
 import '../widgets/order_summary_widget.dart';
 import '../widgets/scrollable_text_widget.dart';
 import '../../services/order_data_provider.dart';
-import '../../utils/checkout_event_constants.dart';
+import '../../utils/checkout_constants.dart';
 import '../../utils//snackbar_utils.dart';
 
 class CheckoutPayoptAddCardConfig extends StatefulWidget {
@@ -49,17 +49,17 @@ class _CheckoutPayOptAddCardConfigState
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (eventData[CheckoutEventConstants.kData]
+          if (eventData[CheckoutEventConstants.data]
               is Map<dynamic, dynamic>) {
-            final data = eventData[CheckoutEventConstants.kData]
+            final data = eventData[CheckoutEventConstants.data]
                 as Map<dynamic, dynamic>;
             final json = new Map<String, dynamic>.from(data);
             print('pay opt add card config json: ${json}');
           }
 
-          if (eventData[CheckoutEventConstants.kDescription] is String) {
+          if (eventData[CheckoutEventConstants.description] is String) {
             final description =
-                eventData[CheckoutEventConstants.kDescription] as String;
+                eventData[CheckoutEventConstants.description] as String;
             textToDisplay = 'Checkout did finish successfully!\n$description';
           }
 
@@ -69,16 +69,16 @@ class _CheckoutPayOptAddCardConfigState
       case CheckoutMethodNames.handleCheckoutFail:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (eventData[CheckoutEventConstants.kData] is String) {
-            final errorData = eventData[CheckoutEventConstants.kData] as String;
+          if (eventData[CheckoutEventConstants.data] is String) {
+            final errorData = eventData[CheckoutEventConstants.data] as String;
           }
-          if (eventData[CheckoutEventConstants.kStatusCode] is int) {
+          if (eventData[CheckoutEventConstants.statusCode] is int) {
             final statusCode =
-                eventData[CheckoutEventConstants.kStatusCode] as int;
+                eventData[CheckoutEventConstants.statusCode] as int;
           }
-          if (eventData[CheckoutEventConstants.kDescription] is String) {
+          if (eventData[CheckoutEventConstants.description] is String) {
             final eventDescription =
-                eventData[CheckoutEventConstants.kDescription] as String;
+                eventData[CheckoutEventConstants.description] as String;
             textToDisplay = eventDescription;
           }
 
@@ -109,6 +109,8 @@ class _CheckoutPayOptAddCardConfigState
       try {
         final checkoutResult = await platform
             .invokeMethod(CheckoutMethodNames.startAddCardCheckoutConfig, {
+          'tenant_id': CheckoutSetupConstants.tenantId,
+          'environment': CheckoutSetupConstants.environment,
           'access_token': _accessToken,
           'saved_fin_ids': ['FIN_ID_1', 'FIN_ID_2']
         });
