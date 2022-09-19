@@ -45,21 +45,11 @@ class CheckoutSetupConstants {
 }
 ```
 
-4. In same directory `lib/utils`.
-   Find `constants.dart` file and setup your custom backend api client URL if you need to test Payment Orchestration integration.
-
-```dart
-class AppConstants {
-  static const paymentOrchestrationServicePath =
-      'https://custom-backend.com/';
-}
-```
-
-5. Run flutter app:\
+4. Run flutter app:\
    On iOS Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).\
    On Android Simulator (<a href="https://docs.flutter.dev/get-started/install/macos#set-up-the-android-emulator" target="_blank">Run Android app Flutter docs</a>).
 
-6. In case of possible issues a common fix is to clean project and reinstall packages:
+5. In case of possible issues a common fix is to clean project and reinstall packages:
 
 ```bash
   flutter clean
