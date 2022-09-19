@@ -44,29 +44,32 @@ class PayOptAddCardConfigChannel: NSObject {
 				return
 			}
 			guard let payload = call.arguments as? [String:Any],
-						let token = payload["access_token"] as? String else {
-				return
+						let token = payload["access_token"] as? String,
+      let tenantId = payload["tenant_id"] as? String,
+         let environment = payload["environment"] as? String else {
+        assertionFailure("Invalid config")
+        return
 			}
 
 			var savedIds: [String]  = []
-			if let ids = payload["saved_fin_ids"] as? [String] {
+			if let ids = payload["saved_fin_ids"] as? [String]          {
 				savedIds = ids
 			}
 
 			print("access_token: \(token)")
 			print("savedIds: \(savedIds)")
-			self?.startAddCardConfiguration(with: token, savedCardIds: savedIds, result: result)
+			self?.startAddCardConfiguration(with: token, tenantID: tenantId, environment: environment, savedCardIds: savedIds, result: result)
 		})
 	}
 
-	private func startAddCardConfiguration(with accessToken: String, savedCardIds: [String], result: @escaping FlutterResult) {
+  private func startAddCardConfiguration(with accessToken: String, tenantID: String, environment: String, savedCardIds: [String], result: @escaping FlutterResult) {
 
 		// Create payment options.
 		var options = VGSCheckoutPaymentOptions()
 		// Add array of saved cards:
 		options.methods = .savedCards(savedCardIds)
 
-		VGSCheckoutAddCardConfiguration.createConfiguration(accessToken: accessToken, tenantId: DemoAppConfiguration.shared.paymentOrchestrationTenantId, environment: DemoAppConfiguration.shared.environment, options: options) {[weak self] configuration in
+		VGSCheckoutAddCardConfiguration.createConfiguration(accessToken: accessToken, tenantId: tenantID, environment: environment, options: options) {[weak self] configuration in
 			guard let strongSelf = self else {return}
 			configuration.billingAddressVisibility = .visible
 
@@ -98,65 +101,6 @@ class PayOptAddCardConfigChannel: NSObject {
 
 			// Call result with error payload to notify Flutter code about error.
 			result(payload)
-		}
-	}
-
-	/// Start custom checkout configuration.
-	/// - Parameter result: `FlutterResult` object, flutter result.
-	private func startCustomCheckoutConfig(result: @escaping FlutterResult) {
-
-		// Use root view controller (acts like a main app widget) to present checkout from.
-		let controller : FlutterViewController = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-
-		var checkoutConfiguration = VGSCheckoutCustomConfiguration(vaultID: DemoAppConfiguration.shared.vaultId, environment: DemoAppConfiguration.shared.environment)
-
-		checkoutConfiguration.cardHolderFieldOptions.fieldNameType = .single("cardHolder_name")
-		checkoutConfiguration.cardNumberFieldOptions.fieldName = "card_number"
-		checkoutConfiguration.expirationDateFieldOptions.fieldName = "exp_data"
-		checkoutConfiguration.cvcFieldOptions.fieldName = "card_cvc"
-
-		checkoutConfiguration.billingAddressVisibility = .visible
-
-		checkoutConfiguration.billingAddressCountryFieldOptions.fieldName = "billing_address.country"
-		checkoutConfiguration.billingAddressCityFieldOptions.fieldName = "billing_address.city"
-		checkoutConfiguration.billingAddressLine1FieldOptions.fieldName = "billing_address.addressLine1"
-		checkoutConfiguration.billingAddressLine2FieldOptions.fieldName = "billing_address.addressLine2"
-		checkoutConfiguration.billingAddressPostalCodeFieldOptions.fieldName = "billing_address.postal_code"
-
-		// Produce nested json for fields with `.` notation.
-		checkoutConfiguration.routeConfiguration.requestOptions.mergePolicy = .nestedJSON
-
-		checkoutConfiguration.routeConfiguration.path = "post"
-
-		/* Set custom date user input/output JSON format.
-
-		checkoutConfiguration.expirationDateFieldOptions.inputDateFormat = .shortYearThenMonth
-		checkoutConfiguration.expirationDateFieldOptions.outputDateFormat = .longYearThenMonth
-
-		let expDateSerializer = VGSCheckoutExpDateSeparateSerializer(monthFieldName: "card_date.month", yearFieldName: "card_date.year")
-		checkoutConfiguration.expirationDateFieldOptions.serializers = [expDateSerializer]
-		*/
-
-		// Init Checkout with vault and ID.
-		vgsCheckout = VGSCheckout(configuration: checkoutConfiguration)
-
-		//VGSPaymentCards.visa.formatPattern = "#### #### #### ####"
-
-		/// Change default valid card number lengthes
-//		VGSPaymentCards.visa.cardNumberLengths = [16]
-//		/// Change default format pattern
-//		VGSPaymentCards.visa.formatPattern = "#### #### #### ####"
-
-		// Listen to events from Checkout in native iOS code.
-		// Delegate is native iOS pattern which implies emitter and single subscriber linked by each other with weak reference semantic.
-		vgsCheckout?.delegate = self
-
-		// Present checkout configuration.
-		vgsCheckout?.present(from: controller)
-
-		// Call result object after presenting checkout with 0.3s delay.
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-			result(nil)
 		}
 	}
 }

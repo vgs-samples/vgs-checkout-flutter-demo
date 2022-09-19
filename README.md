@@ -68,6 +68,7 @@ class AppConstants {
 
 <p align="center">
 	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
+    <span width="20"></span>
     <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo"/> 
 </p>
 
@@ -379,7 +380,7 @@ General integration overview:
 
 ```groovy
 dependencies {
-    
+
     implementation "com.verygoodsecurity:vgscheckout:latest_version"
 }
 ```
@@ -389,5 +390,5 @@ dependencies {
 3. Check our implementation [example](https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/android/app/src/main/kotlin/com/example/vgs_checkout_flutter_demo).
 
 > **_NOTE:_** We used `FlutterFragment` reference to initialize `VGSCheckout` because current `FlutterActivity`
-> does not support `registerForActivityResult` feature which is required by `VGSCheckout`. This setup flow 
+> does not support `registerForActivityResult` feature which is required by `VGSCheckout`. This setup flow
 > can be refactored in next Flutter updates if `FlutterActivity` parent will be updated to `AppCompatActivity`.

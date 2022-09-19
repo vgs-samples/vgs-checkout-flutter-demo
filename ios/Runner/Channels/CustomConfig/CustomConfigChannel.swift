@@ -46,18 +46,24 @@ class CustomConfigChannel: NSObject {
 				return
 			}
 
-			self?.startCustomCheckoutConfig(result: result)
+       guard let payload = call.arguments as? [String:Any],
+            let vaultID = payload["vault_id"] as? String,
+            let environment = payload["environment"] as? String else {
+        return
+      }
+
+			self?.startCustomCheckoutConfig(vaultId: vaultID, environment: environment, result: result)
 		})
 	}
 
 	/// Start custom checkout configuration.
 	/// - Parameter result: `FlutterResult` object, flutter result.
-	private func startCustomCheckoutConfig(result: @escaping FlutterResult) {
+  private func startCustomCheckoutConfig(vaultId: String, environment: String, result: @escaping FlutterResult) {
 
 		// Use root view controller (acts like a main app widget) to present checkout from.
 		let controller : FlutterViewController = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
 
-		var checkoutConfiguration = VGSCheckoutCustomConfiguration(vaultID: DemoAppConfiguration.shared.vaultId, environment: DemoAppConfiguration.shared.environment)
+		var checkoutConfiguration = VGSCheckoutCustomConfiguration(vaultID: vaultId, environment: environment)
 
 		checkoutConfiguration.cardHolderFieldOptions.fieldNameType = .single("cardHolder_name")
 		checkoutConfiguration.cardNumberFieldOptions.fieldName = "card_number"
