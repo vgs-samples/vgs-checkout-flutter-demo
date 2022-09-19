@@ -100,7 +100,7 @@ end
    from Flutter by sending messages.
    The Method Channel stems from binary messaging and the platform channel and supports a bidirectional invocation of methods.
 
-   To keep `AppDelegate` sample lean all code with method channel setup is located in `ios\Runner\Channels` folders. Please check `CustomConfigChannel.swift` and `PayOptAddCardConfigChannel.swift` files.
+   To keep `AppDelegate` sample lean all code with method channel setup is located in `ios\Runner\Channels` folders. Please check `CustomConfigChannel.swift` file.
 
 ```swift
 /// Implementation of Flutter Bridge (FlutterMethodChannel).
@@ -282,7 +282,6 @@ class CheckoutMethodNames {
 
 class CheckoutSetupConstants {
    static const String vaultId = 'vault_id';
-   static const String tenantId = 'tenant_id';
    static const String environment = 'environment';
 }
 ```
