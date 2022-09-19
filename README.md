@@ -68,8 +68,8 @@ class AppConstants {
 
 <p align="center">
 	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
-    <span width="20"></span>
-    <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo"/> 
+    <span></span>
+    <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout Android Flutter demo"/> 
 </p>
 
 ## iOS integration guide
