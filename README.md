@@ -40,7 +40,6 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 ```dart
 class CheckoutSetupConstants {
    static const String vaultId = 'vault_id'; // For custom config
-   static const String tenantId = 'tenant_id'; // For payopt config
    static const String environment = 'environment';
 }
 ```
