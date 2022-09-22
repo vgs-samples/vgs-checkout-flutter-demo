@@ -35,11 +35,11 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
   pod install
 ```
 
-3. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` for custom configuration, `environment` and `tenant_id` for payment orchestration.
+3. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` and `environment`.
 
 ```dart
 class CheckoutSetupConstants {
-   static const String vaultId = 'vault_id'; // For custom config
+   static const String vaultId = 'vault_id';
    static const String environment = 'environment';
 }
 ```
