@@ -3,6 +3,12 @@
 This demo shows how to integrate VGS Checkout [iOS](https://github.com/verygoodsecurity/vgs-checkout-ios) and [Android](https://github.com/verygoodsecurity/vgs-checkout-android) SDK to your Flutter app.
 We don't have official Flutter package. You can easily integrate VGS Checkout SDK into your mobile crossplatform Flutter apps.
 
+<p align="center">
+	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo" hspace="20">
+	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout Android Flutter demo" hspace="20"/> 
+</p>
+
 # Table of contents
 
 <!--ts-->
@@ -52,11 +58,6 @@ class CheckoutSetupConstants {
   flutter clean
   flutter pub get
 ```
-
-<p align="center">
-	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo" hspace="20">
-    <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout Android Flutter demo" hspace="20"/> 
-</p>
 
 ## iOS integration guide
 
