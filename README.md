@@ -7,13 +7,12 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 
 <!--ts-->
 
-- [Run iOS application](#run-ios-application)
-- [Run Android application](#run-android-application)
+- [Run application](#run-application)
 - [iOS integration guide](#ios-integration-guide)
 - [Android integration guide](#android-integration-guide)
 <!--te-->
 
-## Run iOS application
+## Run application
 
 1. Required environment:
 
@@ -36,45 +35,20 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
   pod install
 ```
 
-3. `cd` to `ios/Runner/Models/DemoAppConfiguration` and find
-   `DemoAppConfiguration.swift` file.
-   Set your `vault_id` for custom configuation, `environment`, `tenant_id` for payment orchestration add card setup.
-
-```swift
-/// Setup your configuration details here.
-class DemoAppConfiguration {
-
-	/// Shared instance.
-	static let shared = DemoAppConfiguration()
-
-	/// no:doc
-	private init() {}
-
-	/// Set your vault id here. https://www.verygoodsecurity.com/terminology/nomenclature#vault
-	var vaultId = "VAULT_ID"
-
-	/// Set tenant id matching your payment orchestration configuration.
-	var paymentOrchestrationTenantId = "TENANT_ID"
-
-	/// Set environment - `sandbox` for testing or `live` for production.
-	var environment = "sandbox"
-}
-```
-
-4. go back to root project folder and `cd` to `lib/utils/constants`.
-   Find `constants.dart` file and setup your custom backend api client URL if you need to test Payment Orchestration integration.
+3. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` for custom configuration, `environment` and `tenant_id` for payment orchestration.
 
 ```dart
-class AppConstants {
-  static const paymentOrchestrationServicePath =
-      'https://custom-backend.com/';
+class CheckoutSetupConstants {
+   static const String vaultId = 'vault_id'; // For custom config
+   static const String environment = 'environment';
 }
 ```
 
-5. run flutter app on iOS simulator
-   Run the iOS application on Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).
+4. Run flutter app:\
+   On iOS Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).\
+   On Android Simulator (<a href="https://docs.flutter.dev/get-started/install/macos#set-up-the-android-emulator" target="_blank">Run Android app Flutter docs</a>).
 
-6. in case of possible issues a common fix is to clean project and reinstall packages:
+5. In case of possible issues a common fix is to clean project and reinstall packages:
 
 ```bash
   flutter clean
@@ -82,22 +56,19 @@ class AppConstants {
 ```
 
 <p align="center">
-	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo">
+	<img src="images/VGSCheckout_Flutter_iOS.gif?raw=true" width="200" alt="VGS Checkout iOS Flutter demo" hspace="20">
+    <img src="images/VGSCheckout_Flutter_Android.gif?raw=true" width="200" alt="VGS Checkout Android Flutter demo" hspace="20"/> 
 </p>
-
-## Run Android application
-
-TODO: - add android
 
 ## iOS integration guide
 
 General integration overview:
 
 <p align="center">
-	<img src="https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
+	<img src="images/checkout_flutter_ios_integration.png" alt="VGS Checkout iOS Flutter integration diagram">
 </p>
 
-1. Review offical Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
+1. Review official Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
 
 2. Install `VGS Checkout SDK` via `CocoaPods`. If you have created from scratch Flutter project usually you need to preinstall `CocoaPods`. `cd` to `ios` folder and run:
 
@@ -129,7 +100,7 @@ end
    from Flutter by sending messages.
    The Method Channel stems from binary messaging and the platform channel and supports a bidirectional invocation of methods.
 
-   To keep `AppDelegate` sample lean all code with method channel setup is located in `ios\Runner\Channels` folders. Please check `CustomConfigChannel.swift` and `PayOptAddCardConfigChannel.swift` files.
+   To keep `AppDelegate` sample lean all code with method channel setup is located in `ios\Runner\Channels` folders. Please check `CustomConfigChannel.swift` file.
 
 ```swift
 /// Implementation of Flutter Bridge (FlutterMethodChannel).
@@ -188,23 +159,25 @@ static const platform = MethodChannel('vgs.com.checkout/customConfig');
 // On button tap send `startCustomCheckoutConfig` message to native iOS code.
 Future<void> _startCheckoutCustomConfig() async {
    try {
-     final checkoutResult =
-          await platform.invokeMethod('startCustomCheckoutConfig');
-     print('present checkout with custon config');
+      final checkoutResult = await platform
+              .invokeMethod(CheckoutMethodNames.startCustomCheckoutConfig, {
+         'vaultId': CheckoutSetupConstants.vaultId,
+         'environment': CheckoutSetupConstants.environment
+      });
+      print('present checkout with custom config');
    } on PlatformException catch (e) {
-     print('Platform exception: ${e.message}');
+      print('Platform exception: ${e.message}');
    }
-
    setState(() {
-     // Update UI..
+      // Update UI..
    });
 }
 ```
 
-7. Implement `VGSCheckoutDelegate` inteface in your native channel implementation.
+7. Implement `VGSCheckoutDelegate` interface in your native channel implementation.
    VGS Checkout cannot emit events to Flutter code directly. It provides `VGSCheckoutDelegate` with a set of methods.
    A delegate is just a class that does some work for another class and instances are usually linked by weak reference.
-   You need to listen to `VGSCheckoutDelegate` methods and invoce methods in Flutter code using `invokeMethod`.
+   You need to listen to `VGSCheckoutDelegate` methods and invoice methods in Flutter code using `invokeMethod`.
    It is up to you how to send and parse arguments payload.
    A suitable data structure can be Swift dictionary of type `[String: Any]` which will be transmitted as `Map<dynamic, dynamic>` in Flutter code.
 
@@ -284,19 +257,19 @@ import Flutter
 }
 ```
 
-9. Define constants for method names and payload.
+9. Define constants for method names, payload and checkout setup.
 
 ```dart
 class CheckoutEventConstants {
-  static const String kStatus = 'STATUS';
-  static const String kFinishedSuccess = 'FINISHED_SUCCESS';
-  static const String kFinishedError = 'FINISHED_ERROR';
-  static const String kStatusCode = 'STATUS_CODE';
-  static const String kPaymentMethod = 'PAYMENT_METHOD';
-  static const String kShouldSaveCard = 'SHOULD_SAVE_CARD';
-  static const String kData = 'DATA';
-  static const String kDescription = 'DESCRIPTION';
-  static const String kCancelled = 'CANCELLED';
+   static const String status = 'STATUS';
+   static const String finishedSuccess = 'FINISHED_SUCCESS';
+   static const String finishedError = 'FINISHED_ERROR';
+   static const String statusCode = 'STATUS_CODE';
+   static const String paymentMethod = 'PAYMENT_METHOD';
+   static const String shouldSaveCard = 'SHOULD_SAVE_CARD';
+   static const String data = 'DATA';
+   static const String description = 'DESCRIPTION';
+   static const String cancelled = 'CANCELLED';
 }
 
 class CheckoutMethodNames {
@@ -305,6 +278,11 @@ class CheckoutMethodNames {
   static const String handleCheckoutFail = 'handleCheckoutFail';
   static const String startCustomCheckoutConfig = 'startCustomCheckoutConfig';
   static const String startAddCardCheckoutConfig = 'startCheckoutAddCardConfig';
+}
+
+class CheckoutSetupConstants {
+   static const String vaultId = 'vault_id';
+   static const String environment = 'environment';
 }
 ```
 
@@ -330,17 +308,17 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
       case CheckoutMethodNames.handleCheckoutSuccess:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (eventData[CheckoutEventConstants.kData]
+          if (eventData[CheckoutEventConstants.data]
               is Map<dynamic, dynamic>) {
-            final data = eventData[CheckoutEventConstants.kData]
+            final data = eventData[CheckoutEventConstants.data]
                 as Map<dynamic, dynamic>;
             final json = new Map<String, dynamic>.from(data);
             print('custom config json: ${json}');
           }
 
-          if (eventData[CheckoutEventConstants.kDescription] is String) {
+          if (eventData[CheckoutEventConstants.description] is String) {
             final description =
-                eventData[CheckoutEventConstants.kDescription] as String;
+                eventData[CheckoutEventConstants.description] as String;
             textToDisplay = 'Checkout did finish successfully!\n$description';
           }
 
@@ -350,8 +328,8 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
       case CheckoutMethodNames.handleCheckoutFail:
         if (arguments != null && arguments is Map<dynamic, dynamic>) {
           var eventData = new Map<String, dynamic>.from(arguments);
-          if (arguments[CheckoutEventConstants.kData] is String) {
-            final errorText = eventData[CheckoutEventConstants.kData] as String;
+          if (arguments[CheckoutEventConstants.data] is String) {
+            final errorText = eventData[CheckoutEventConstants.data] as String;
             textToDisplay = 'Checkout did failed\n$errorText';
           }
         }
@@ -379,4 +357,25 @@ Future<dynamic> invokedMethods(MethodCall methodCall) async {
 
 ## Android integration guide
 
-TODO: - add android guide
+General integration overview:
+
+<p align="center">
+	<img src="images/checkout_flutter_android_integration.png" alt="VGS Checkout Android Flutter integration diagram">
+</p>
+
+1. Add latest version of VGS Checkout SDK into your `android/app/build.gradle`:
+
+```groovy
+dependencies {
+
+    implementation "com.verygoodsecurity:vgscheckout:latest_version"
+}
+```
+
+2. Review official Flutter [documentation](https://docs.flutter.dev/development/platform-integration/platform-channels) how to integrate native and Flutter code.
+
+3. Check our implementation [example](https://github.com/vgs-samples/vgs-checkout-flutter-demo/blob/main/android/app/src/main/kotlin/com/example/vgs_checkout_flutter_demo).
+
+> **_NOTE:_** We used `FlutterFragment` reference to initialize `VGSCheckout` because current `FlutterActivity`
+> does not support `registerForActivityResult` feature which is required by `VGSCheckout`. This setup flow
+> can be refactored in next Flutter updates if `FlutterActivity` parent will be updated to `AppCompatActivity`.

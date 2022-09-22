@@ -21,23 +21,23 @@ class CheckoutUseCases extends StatelessWidget {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, RouteNames.kCustomConfig);
+                Navigator.pushNamed(context, RouteNames.customConfig);
               },
               child: CheckoutUseCaseItem(
                 title: 'Checkout Custom Config',
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, RouteNames.kPayOptAddCardConfig);
-              },
-              child: CheckoutUseCaseItem(
-                title: 'Checkout PayOpt Add Card Config',
-              ),
-            )
+            // SizedBox(
+            //   height: 8,
+            // ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.pushNamed(context, RouteNames.kPayOptAddCardConfig);
+            //   },
+            //   child: CheckoutUseCaseItem(
+            //     title: 'Checkout PayOpt Add Card Config',
+            //   ),
+            // )
           ],
         ),
       ),
