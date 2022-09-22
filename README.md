@@ -14,9 +14,7 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 
 ## Run application
 
-1. Required environment:
-
-### Requirements
+1. Requirements:
 
 - Installed <a href="https://flutter.dev/docs/get-started/install" target="_blank">Flutter</a>
 - Setup <a href="https://flutter.dev/docs/get-started/editor?tab=androidstudio" target="_blank">IDEA</a>
