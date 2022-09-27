@@ -1,7 +1,7 @@
 PODS:
-  - VGSCheckoutSDK (1.3.2):
-    - VGSCheckoutSDK/Core (= 1.3.2)
-  - VGSCheckoutSDK/Core (1.3.2)
+  - VGSCheckoutSDK (1.3.3):
+    - VGSCheckoutSDK/Core (= 1.3.3)
+  - VGSCheckoutSDK/Core (1.3.3)
 
 DEPENDENCIES:
   - VGSCheckoutSDK
@@ -11,7 +11,7 @@ SPEC REPOS:
     - VGSCheckoutSDK
 
 SPEC CHECKSUMS:
-  VGSCheckoutSDK: 3bdb240d60675891b796cfb6769bd3bda007988f
+  VGSCheckoutSDK: 3de8c69c37f339b8453f7e02b17cd8a0edb4df36
 
 PODFILE CHECKSUM: 91102345a9e6746087dd6494c23817b5613b34d2
 
