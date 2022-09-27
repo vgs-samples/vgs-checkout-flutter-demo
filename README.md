@@ -59,6 +59,10 @@ class CheckoutSetupConstants {
   flutter pub get
 ```
 
+6. In case of error in VS Code `Flutter VsCode error: You don't have an extension for debugging YAML` please check [this answer:](https://stackoverflow.com/a/68949816)
+
+Click on "open a file", then navigate to the main.dart file and then click debug and run.
+
 ## iOS integration guide
 
 General integration overview:
