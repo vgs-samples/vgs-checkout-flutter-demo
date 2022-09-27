@@ -30,7 +30,7 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 
 > **_NOTE:_** Please visit Flutter <a href="https://flutter.dev/docs" target="_blank">documentation</a>
 > for more detailed explanation how to setup Flutter and IDEA.</br>
-> This sample is compatitable with Flutter 3.0.5 version.</br>
+> This sample is compatitable with Flutter 3.2.0 version.</br>
 > Check Flutter issues <a href="https://github.com/flutter/flutter/issues" target="_blank">here.</a>
 
 2. `cd` to `ios` folder and run
