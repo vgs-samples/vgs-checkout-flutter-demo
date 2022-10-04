@@ -30,16 +30,22 @@ We don't have official Flutter package. You can easily integrate VGS Checkout SD
 
 > **_NOTE:_** Please visit Flutter <a href="https://flutter.dev/docs" target="_blank">documentation</a>
 > for more detailed explanation how to setup Flutter and IDEA.</br>
-> This sample is compatitable with Flutter 3.0.5 version.</br>
+> This sample is compatitable with Flutter 3.2.0 version.</br>
 > Check Flutter issues <a href="https://github.com/flutter/flutter/issues" target="_blank">here.</a>
 
-2. `cd` to `ios` folder and run
+2. Install Flutter packages
+
+```bash
+flutter pub get
+```
+
+3. `cd` to `ios` folder and run
 
 ```bash
   pod install
 ```
 
-3. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` and `environment`.
+4. `cd` to `lib/utils`. Find `checkout_constants.dart` file and set your `vault_id` and `environment`.
 
 ```dart
 class CheckoutSetupConstants {
@@ -48,16 +54,20 @@ class CheckoutSetupConstants {
 }
 ```
 
-4. Run flutter app:\
+5. Run flutter app:\
    On iOS Simulator (<a href="https://flutter.dev/docs/get-started/install/macos#set-up-the-ios-simulator" target="_blank">Run iOS app Flutter docs</a>).\
    On Android Simulator (<a href="https://docs.flutter.dev/get-started/install/macos#set-up-the-android-emulator" target="_blank">Run Android app Flutter docs</a>).
 
-5. In case of possible issues a common fix is to clean project and reinstall packages:
+6. In case of possible issues a common fix is to clean project and reinstall packages:
 
 ```bash
   flutter clean
   flutter pub get
 ```
+
+7. In case of error in VS Code `Flutter VsCode error: You don't have an extension for debugging YAML` please check [this answer:](https://stackoverflow.com/a/68949816)
+
+Click on "open a file", then navigate to the main.dart file and then click debug and run.
 
 ## iOS integration guide
 
